@@ -1,0 +1,167 @@
+// prisma/schema.prisma - Database schema for 7DTD game
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  
+  gameProfile GameProfile?
+  gameSaves   GameSave[]
+  baseBlocks  BaseBlock[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GameProfile {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  
+  // Character stats
+  health    Int      @default(100)
+  hunger    Int      @default(50)
+  thirst    Int      @default(50)
+  infection Int      @default(0)
+  fatigue   Int      @default(0)
+  
+  // Position
+  posX      Float    @default(100)
+  posY      Float    @default(20)
+  posZ      Float    @default(100)
+  rotX      Float    @default(0)
+  rotY      Float    @default(0)
+  
+  // Stats
+  level     Int      @default(1)
+  experience Int     @default(0)
+  kills     Int      @default(0)
+  daysSurvived Int   @default(0)
+  
+  // Inventory (JSON)
+  inventory Json     @default("{}")
+  
+  // Perks/skills
+  skills    Json     @default("{}")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GameSave {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  
+  // World state
+  gameTime  Float    @default(0)
+  mapSeed   Int      @default(42)
+  
+  // Save data (serialized)
+  worldData Json
+  zombieData Json
+  
+  // Save metadata
+  slotNumber Int     @default(1)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([userId, slotNumber])
+}
+
+model BaseBlock {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  
+  // Block position
+  x         Int
+  y         Int
+  z         Int
+  
+  // Block properties
+  type      String   // "wood", "concrete", "steel", "door", "trap"
+  hp        Int      @default(100)
+  maxHp     Int      @default(100)
+  
+  // Structural
+  supportStrength Int @default(100)
+  parentBlock String?
+  
+  // Crafting
+  craftedRecipe String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([userId, x, y, z])
+}
+
+model LootLocation {
+  id        String   @id @default(cuid())
+  
+  // Position
+  x         Float
+  y         Float
+  z         Float
+  
+  // Loot properties
+  type      String   // "supermarket", "house", "hospital", "police", "military"
+  items     Json     @default("[]")
+  respawnTime Int    @default(7200) // seconds
+  
+  lastLooted DateTime?
+  
+  createdAt DateTime @default(now())
+}
+
+model CraftingRecipe {
+  id        String   @id @default(cuid())
+  
+  // Recipe name
+  name      String   @unique
+  category  String   // "tools", "weapons", "armor", "food", "blocks"
+  
+  // Ingredients (JSON: [{ item: "wood", amount: 5 }])
+  ingredients Json
+  
+  // Output
+  outputItem String
+  outputAmount Int @default(1)
+  
+  // Crafting
+  craftTime Int      // seconds
+  skillRequired String?
+  skillLevel Int     @default(1)
+  
+  createdAt DateTime @default(now())
+}
+
+model ZombieSpawner {
+  id        String   @id @default(cuid())
+  
+  // Location
+  x         Float
+  y         Float
+  z         Float
+  radius    Float    @default(50)
+  
+  // Spawning
+  type      String   // "walker", "runner", "cop", "spitter", "smutki"
+  maxZombies Int     @default(10)
+  spawnRate Float    @default(0.1) // zombies per second
+  
+  isActive  Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+}
