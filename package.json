@@ -1,16 +1,13 @@
 {
   "name": "zombie-survival-7dtd",
   "version": "0.1.0",
-  "description": "Realistic 7 Days to Die-style survival game built with Three.js + Next.js",
+  "description": "Realistic 7 Days to Die-style survival game built with Three.js + React + Next.js",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "prisma:studio": "prisma studio",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "node prisma/seed.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -18,12 +15,9 @@
     "next": "^15.0.0",
     "three": "^r128",
     "cannon-es": "^0.20.0",
-    "cannon-es-debugger": "^0.20.0",
     "zustand": "^4.4.0",
-    "prisma": "^5.0.0",
     "@prisma/client": "^5.0.0",
     "next-auth": "^4.24.0",
-    "socket.io": "^4.8.0",
     "socket.io-client": "^4.8.0",
     "tailwindcss": "^3.3.0",
     "framer-motion": "^10.16.0"
@@ -31,100 +25,9 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
-    "@types/three": "^r128",
     "typescript": "^5.0.0",
+    "prisma": "^5.0.0",
     "eslint": "^8.0.0",
-    "eslint-config-next": "^15.0.0",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.0"
+    "eslint-config-next": "^15.0.0"
   }
 }
-
-===== DEPLOYMENT CHECKLIST =====
-
-🎯 PRE-DEPLOYMENT:
-✅ Tested locally: npm run dev
-✅ Built successfully: npm run build
-✅ Database migrations: npx prisma migrate dev
-✅ Environment variables set in .env.local
-✅ Assets in public/ folder
-✅ No console errors/warnings
-
-📋 PRODUCTION SETUP:
-
-1. Vercel Deployment:
-   - Connect GitHub repo
-   - Set env vars:
-     * DATABASE_URL (Neon PostgreSQL)
-     * NEXTAUTH_SECRET (generate: openssl rand -base64 32)
-     * NODE_ENV=production
-   - Deploy!
-
-2. Neon PostgreSQL:
-   - Create project: https://console.neon.tech
-   - Get connection string
-   - Add to Vercel env vars
-   - Run: npx prisma migrate deploy
-
-3. Cloudflare CDN (optional):
-   - Add Vercel domain to Cloudflare
-   - Enable Full SSL/TLS
-   - Cache static assets (public/)
-
-4. Monitoring:
-   - Vercel Analytics: Auto enabled
-   - Sentry for error tracking (optional)
-   - Logs: Vercel Dashboard
-
-🚀 LAUNCH CHECKLIST:
-
-- [ ] Domain pointing to Vercel
-- [ ] Database backup configured
-- [ ] Monitoring/alerts active
-- [ ] Staging environment tested
-- [ ] Performance: <3s initial load
-- [ ] Mobile responsive
-- [ ] 404 page configured
-- [ ] Privacy policy ready
-- [ ] Terms of service ready
-- [ ] Launch announcement ready
-
-⚙️ SCALING FOR MULTIPLAYER:
-
-1. Socket.io Setup:
-   - Upgrade to Socket.io adapter (Redis)
-   - Use Socket.io namespaces for game rooms
-   - Implement state sync every 100ms
-
-2. Database Optimization:
-   - Add indexes to PlayerPosition table
-   - Archive old GameSave records
-   - Cache frequently accessed data
-
-3. Load Balancing:
-   - Vercel auto-scales Node.js functions
-   - Neon auto-scales PostgreSQL
-   - Consider CDN for assets
-
-🎮 NEXT FEATURES:
-
-Phase 2:
-- [ ] 3D models + animations
-- [ ] Sound effects + music
-- [ ] Weapon system (guns, melee)
-- [ ] Vehicle mechanics
-- [ ] Multiplayer (4+ players)
-- [ ] Skill tree + leveling
-- [ ] NPC traders
-- [ ] Radiation zones
-- [ ] Weather system
-- [ ] Seasons
-
-Phase 3:
-- [ ] Mobile app (React Native)
-- [ ] Cross-platform multiplayer
-- [ ] In-game marketplace
-- [ ] Clans/guilds
-- [ ] Tournaments
-- [ ] Battle pass
-- [ ] Premium cosmetics

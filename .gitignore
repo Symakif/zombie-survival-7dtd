@@ -1,0 +1,14 @@
+# W folderze projektu utwórz plik: .gitignore
+cat > .gitignore << EOF
+node_modules/
+.next/
+dist/
+.env
+.env.local
+.env.*.local
+.vercel
+.DS_Store
+*.log
+.vscode/
+.idea/
+EOF
